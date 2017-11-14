@@ -1,0 +1,53 @@
+version: "3.3"
+
+
+networks:
+
+  web-net:
+    # Use default driver.
+
+
+volumes:
+
+  mattermost-config:
+    driver: local
+
+  mattermost-data:
+    driver: local
+
+  mattermost-postgres-data:
+    driver: local
+
+
+services:
+
+  mattermost:
+    build: .
+    image: arvacims/mattermost:4.3.2
+    environment:
+      - DB_HOST=mattermost-postgres
+      - DB_PORT_5432_TCP_PORT=5432
+      - MM_USERNAME=mmuser
+      - MM_PASSWORD=mmuser_password
+      - MM_DBNAME=mattermost
+    ports:
+      - target: 80
+        published: 80
+        protocol: tcp
+        mode: host
+    networks:
+      - web-net
+    volumes:
+      - mattermost-config:/mattermost/config
+      - mattermost-data:/mattermost/data
+
+  mattermost-postgres:
+    image: postgres:9.6.6-alpine
+    environment:
+      - POSTGRES_USER=mmuser
+      - POSTGRES_PASSWORD=mmuser_password
+      - POSTGRES_DB=mattermost
+    networks:
+      - web-net
+    volumes:
+      - mattermost-postgres-data:/var/lib/postgresql/data
