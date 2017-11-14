@@ -1,4 +1,4 @@
-FROM ubuntu:14.04
+FROM ubuntu:xenial-20171006
 
 # Some ENV variables
 ENV PATH="/mattermost/bin:${PATH}"
