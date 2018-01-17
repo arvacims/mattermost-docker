@@ -1,17 +1,18 @@
-FROM ubuntu:xenial-20171006
+FROM ubuntu:16.04
 
 # Some ENV variables
 ENV PATH="/mattermost/bin:${PATH}"
-ENV MM_VERSION=4.3.2
+ENV MM_VERSION=4.6.0
 
 ENV edition=team
 
 # Install some needed packages
 RUN apt-get update \
-    && apt-get -y install \
+    && apt-get -y --no-install-recommends install \
       curl \
       jq \
       netcat \
+      ca-certificates \
     && rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*.deb /var/cache/apt/archives/partial/*.deb /var/cache/apt/*.bin
 
 # Get Mattermost
@@ -24,7 +25,7 @@ RUN mkdir -p /mattermost/data \
 # Configure entrypoint and command
 COPY entrypoint.sh /
 ENTRYPOINT ["/entrypoint.sh"]
-WORKDIR /mattermost/bin
+WORKDIR /mattermost
 CMD ["platform"]
 
 # Expose port 80 of the container
