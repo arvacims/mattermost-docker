@@ -31,7 +31,7 @@ services:
       - "MM_PASSWORD=mmuser_password"
       - "MM_DBNAME=mattermost"
     ports:
-      - "80:80/tcp"
+      - "8000:8000/tcp"
     networks:
       - "web-net"
     volumes:
