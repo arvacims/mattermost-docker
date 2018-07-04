@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # Function to generate a random salt
 generate_salt() {
@@ -14,10 +14,10 @@ MM_DBNAME=${MM_DBNAME:-mattermost}
 MM_CONFIG=${MM_CONFIG:-/mattermost/config/config.json}
 
 if [ "${1:0:1}" = '-' ]; then
-    set -- platform "$@"
+    set -- mattermost "$@"
 fi
 
-if [ "$1" = 'platform' ]; then
+if [ "$1" = 'mattermost' ]; then
   # Check CLI args for a -config option
   for ARG in $@;
   do
@@ -35,7 +35,7 @@ if [ "$1" = 'platform' ]; then
     # Copy default configuration file
     cp /config.json.save $MM_CONFIG
     # Substitue some parameters with jq
-    jq '.ServiceSettings.ListenAddress = ":80"' $MM_CONFIG > $MM_CONFIG.tmp && mv $MM_CONFIG.tmp $MM_CONFIG
+    jq '.ServiceSettings.ListenAddress = ":8000"' $MM_CONFIG > $MM_CONFIG.tmp && mv $MM_CONFIG.tmp $MM_CONFIG
     jq '.LogSettings.EnableConsole = false' $MM_CONFIG > $MM_CONFIG.tmp && mv $MM_CONFIG.tmp $MM_CONFIG
     jq '.LogSettings.ConsoleLevel = "INFO"' $MM_CONFIG > $MM_CONFIG.tmp && mv $MM_CONFIG.tmp $MM_CONFIG
     jq '.FileSettings.Directory = "/mattermost/data/"' $MM_CONFIG > $MM_CONFIG.tmp && mv $MM_CONFIG.tmp $MM_CONFIG
@@ -77,7 +77,7 @@ if [ "$1" = 'platform' ]; then
   # Necessary to avoid "panic: Failed to open sql connection pq: the database system is starting up"
   sleep 1
 
-  echo "Starting platform"
+  echo "Starting mattermost"
 fi
 
 exec "$@"
