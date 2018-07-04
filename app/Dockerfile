@@ -4,10 +4,9 @@ FROM alpine:3.6
 ENV PATH="/mattermost/bin:${PATH}"
 ENV MM_VERSION=5.0.0
 
-# Build argument to set Mattermost edition
-ARG edition=team
-ARG PUID=2000
-ARG PGID=2000
+ENV edition=team
+ENV PUID=2000
+ENV PGID=2000
 
 
 # Install some needed packages
